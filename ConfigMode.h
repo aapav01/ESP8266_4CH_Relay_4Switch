@@ -11,9 +11,9 @@ const byte DNS_PORT = 53;
 
 
 #ifdef BLYNK_USE_SPIFFS
-  #include <FS.h>
+#include <FS.h>
 #else
-  const char* config_form = R"html(
+const char* config_form = R"html(
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -173,7 +173,7 @@ void enterConfigMode()
       }
 
       IPAddress addr;
-      
+
       if (ip.length() && addr.fromString(ip)) {
         configStore.staticIP = addr;
         configStore.setFlag(CONFIG_FLAG_STATIC_IP, true);
@@ -217,15 +217,15 @@ void enterConfigMode()
     getWiFiName(ssidBuff, sizeof(ssidBuff));
     char buff[512];
     snprintf(buff, sizeof(buff),
-      R"json({"board":"%s","tmpl_id":"%s","fw_type":"%s","fw_ver":"%s","ssid":"%s","bssid":"%s","last_error":%d,"wifi_scan":true,"static_ip":true})json",
-      BLYNK_DEVICE_NAME,
-      tmpl ? tmpl : "Unknown",
-      BLYNK_FIRMWARE_TYPE,
-      BLYNK_FIRMWARE_VERSION,
-      ssidBuff,
-      WiFi.softAPmacAddress().c_str(),
-      configStore.last_error
-    );
+             R"json({"board":"%s","tmpl_id":"%s","fw_type":"%s","fw_ver":"%s","ssid":"%s","bssid":"%s","last_error":%d,"wifi_scan":true,"static_ip":true})json",
+             BLYNK_DEVICE_NAME,
+             tmpl ? tmpl : "Unknown",
+             BLYNK_FIRMWARE_TYPE,
+             BLYNK_FIRMWARE_VERSION,
+             ssidBuff,
+             WiFi.softAPmacAddress().c_str(),
+             configStore.last_error
+            );
     server.send(200, "application/json", buff);
   });
   server.on("/wifi_scan.json", []() {
@@ -267,23 +267,23 @@ void enterConfigMode()
 
         const char* sec;
         switch (WiFi.encryptionType(id)) {
-        case ENC_TYPE_WEP:  sec = "WEP"; break;
-        case ENC_TYPE_TKIP: sec = "WPA/PSK"; break;
-        case ENC_TYPE_CCMP: sec = "WPA2/PSK"; break;
-        case ENC_TYPE_AUTO: sec = "WPA/WPA2/PSK"; break;
-        case ENC_TYPE_NONE: sec = "OPEN"; break;
-        default:            sec = "unknown"; break;
+          case ENC_TYPE_WEP:  sec = "WEP"; break;
+          case ENC_TYPE_TKIP: sec = "WPA/PSK"; break;
+          case ENC_TYPE_CCMP: sec = "WPA2/PSK"; break;
+          case ENC_TYPE_AUTO: sec = "WPA/WPA2/PSK"; break;
+          case ENC_TYPE_NONE: sec = "OPEN"; break;
+          default:            sec = "unknown"; break;
         }
 
         snprintf(buff, sizeof(buff),
-          R"json(  {"ssid":"%s","bssid":"%s","rssi":%i,"sec":"%s","ch":%i,"hidden":%d})json",
-          WiFi.SSID(id).c_str(),
-          WiFi.BSSIDstr(id).c_str(),
-          WiFi.RSSI(id),
-          sec,
-          WiFi.channel(id),
-          WiFi.isHidden(id)
-        );
+                 R"json(  {"ssid":"%s","bssid":"%s","rssi":%i,"sec":"%s","ch":%i,"hidden":%d})json",
+                 WiFi.SSID(id).c_str(),
+                 WiFi.BSSIDstr(id).c_str(),
+                 WiFi.RSSI(id),
+                 sec,
+                 WiFi.channel(id),
+                 WiFi.isHidden(id)
+                );
 
         server.sendContent(buff);
         if (i != wifi_nets-1) server.sendContent(",\n");
@@ -325,7 +325,7 @@ void enterConfigMode()
   }
 
   server.stop();
-  
+
 #ifdef BLYNK_USE_SPIFFS
   SPIFFS.end();
 #endif
@@ -346,11 +346,11 @@ void enterConnectNet() {
 
   if (configStore.getFlag(CONFIG_FLAG_STATIC_IP)) {
     if (!WiFi.config(configStore.staticIP,
-                    configStore.staticGW,
-                    configStore.staticMask,
-                    configStore.staticDNS,
-                    configStore.staticDNS2)
-    ) {
+                     configStore.staticGW,
+                     configStore.staticMask,
+                     configStore.staticDNS,
+                     configStore.staticDNS2)
+       ) {
       DEBUG_PRINT("Failed to configure Static IP");
       config_set_last_error(BLYNK_PROV_ERR_CONFIG);
       BlynkState::set(MODE_ERROR);
@@ -399,8 +399,8 @@ void enterConnectCloud() {
 
   unsigned long timeoutMs = millis() + WIFI_CLOUD_CONNECT_TIMEOUT;
   while ((timeoutMs > millis()) &&
-        (!Blynk.isTokenInvalid()) &&
-        (Blynk.connected() == false))
+         (!Blynk.isTokenInvalid()) &&
+         (Blynk.connected() == false))
   {
     delay(10);
     Blynk.run();
@@ -447,9 +447,9 @@ void enterSwitchToSTA() {
 
 void enterError() {
   BlynkState::set(MODE_ERROR);
-  
+
   unsigned long timeoutMs = millis() + 10000;
-  while (timeoutMs > millis() || g_buttonPressed)
+  while (timeoutMs > millis())
   {
     delay(10);
     app_loop();

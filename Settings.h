@@ -1,7 +1,7 @@
 
 /*
- * Board configuration (see examples below).
- */
+   Board configuration (see examples below).
+*/
 
 #define BOARD_BUTTON_PIN            0
 #define BOARD_BUTTON_ACTIVE_LOW     true
@@ -11,8 +11,8 @@
 #define BOARD_LED_BRIGHTNESS        255
 
 /*
- * Advanced options
- */
+   Advanced options
+*/
 
 #define BUTTON_HOLD_TIME_INDICATION   3000
 #define BUTTON_HOLD_TIME_ACTION       10000
@@ -38,7 +38,7 @@
 #define BLYNK_NO_DEFAULT_BANNER
 
 #if defined(APP_DEBUG)
-  #define DEBUG_PRINT(...) BLYNK_LOG1(__VA_ARGS__)
+#define DEBUG_PRINT(...) BLYNK_LOG1(__VA_ARGS__)
 #else
-  #define DEBUG_PRINT(...)
+#define DEBUG_PRINT(...)
 #endif
