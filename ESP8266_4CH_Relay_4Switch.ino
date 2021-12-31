@@ -1,17 +1,17 @@
-/* 
- * Copyright (C) 2021-2022 Apavayan Sinha
- * 
- * The Application create a link to Blynk cloud server to controller
- * 4 relay attached to the Hardware (ESP8266) with 4 switch for Manual
- * Control. The chip should connect to a Wi-Fi network and allow to us
- * to controll the appliances connected to the IoT Extension Borad.
- *
- * The Application is based on Blynk.Edgent.Edgent_ESP8266 example code
- * Provide in the Blynk Libary. It is used to have full features access
- * like OTA from Blynk Dashboard for Future Updatation of the product.
- * 
- * Author: Apavayan Sinha (info@apavayan.com)
- */
+/*
+   Copyright (C) 2021-2022 Apavayan Sinha
+
+   The Application create a link to Blynk cloud server to controller
+   4 relay attached to the Hardware (ESP8266) with 4 switch for Manual
+   Control. The chip should connect to a Wi-Fi network and allow to us
+   to controll the appliances connected to the IoT Extension Borad.
+
+   The Application is based on Blynk.Edgent.Edgent_ESP8266 example code
+   Provide in the Blynk Libary. It is used to have full features access
+   like OTA from Blynk Dashboard for Future Updatation of the product.
+
+   Author: Apavayan Sinha (info@apavayan.com)
+*/
 
 // Blynk Cloud Setup
 #define BLYNK_TEMPLATE_ID "TMPL34npI7-p"
@@ -29,10 +29,10 @@
 #include "BlynkEdgent.h"
 
 /*
- * GPIO PINs 
- * 
- * Which will used to to controll the relay and Switch
- */
+   GPIO PINs
+
+   Which will used to to controll the relay and Switch
+*/
 #define RELAY_OUTPUT_1 4  // D2
 #define RELAY_OUTPUT_2 5  // D1
 #define RELAY_OUTPUT_3 12 // D6
@@ -44,35 +44,42 @@
 #define SWITCH_INPUT_4 10 // D0
 
 /*
- * Virtual PINs 
- * 
- * Which will used to to controll the State of relay from the
- * Application.
- */
+   Virtual PINs
+
+   Which will used to to controll the State of relay from the
+   Application.
+*/
 #define VPIN_BUTTON_1 V1
 #define VPIN_BUTTON_2 V2
 #define VPIN_BUTTON_3 V3
 #define VPIN_BUTTON_4 V4
 
 /*
- * Relay State
- * 
- * Define V0 (LOW) To Set Default Toggle State for Relay.
- * 
- * 0 (LOW) Means 0 Volt
- * 1 (HIGH) Means 5/3.3 Volt
- */
+   Relay State
+
+   Define V0 (LOW) To Set Default Toggle State for Relay.
+
+   0 (LOW) Means 0 Volt
+   1 (HIGH) Means 5/3.3 Volt
+*/
 bool ToggleState_1 = 0;
 bool ToggleState_2 = 0;
 bool ToggleState_3 = 0;
 bool ToggleState_4 = 0;
 
+bool prev_state_switch_1 = 0;
+bool prev_state_switch_2 = 0;
+bool prev_state_switch_3 = 0;
+bool prev_state_switch_4 = 0;
+
+
 void setup()
 {
-  //  Serial.begin(9600); // Our BORAD is spec for Baud for 9600
   Serial.begin(115200); // Our BORAD is spec for Baud for 115200
+
+
   // Will Wait for Boot as few I/0 pin takes 100ms to boot
-  // so we will wait 150ms just to be safe.
+  // so we will wait 500ms just to be safe.
   delay(500);
 
   // Set ALl Switchs as Input
@@ -104,17 +111,11 @@ void setup()
   BlynkEdgent.begin();
 }
 
-bool prev_state_switch_1 = 0;
-bool prev_state_switch_2 = 0;
-bool prev_state_switch_3 = 0;
-bool prev_state_switch_4 = 0;
-
 void loop()
 {
   BlynkEdgent.run();
 #ifdef SWITCH_INPUT_1
-  if (digitalRead(SWITCH_INPUT_1) == LOW)
-  {
+  if (digitalRead(SWITCH_INPUT_1) == LOW) {
     digitalWrite(RELAY_OUTPUT_1, LOW);
     ToggleState_1 = LOW;
     prev_state_switch_1 = 1;
@@ -122,8 +123,7 @@ void loop()
   }
 #endif
 #ifdef SWITCH_INPUT_2
-  if (digitalRead(SWITCH_INPUT_2) == LOW)
-  {
+  if (digitalRead(SWITCH_INPUT_2) == LOW) {
     digitalWrite(RELAY_OUTPUT_2, LOW);
     ToggleState_2 = LOW;
     prev_state_switch_2 = 1;
@@ -131,8 +131,7 @@ void loop()
   }
 #endif
 #ifdef SWITCH_INPUT_3
-  if (digitalRead(SWITCH_INPUT_3) == LOW)
-  {
+  if (digitalRead(SWITCH_INPUT_3) == LOW) {
     digitalWrite(RELAY_OUTPUT_3, LOW);
     ToggleState_3 = LOW;
     prev_state_switch_3 = 1;
@@ -140,8 +139,7 @@ void loop()
   }
 #endif
 #ifdef SWITCH_INPUT_4
-  if (digitalRead(SWITCH_INPUT_4) == LOW)
-  {
+  if (digitalRead(SWITCH_INPUT_4) == LOW) {
     digitalWrite(RELAY_OUTPUT_4, LOW);
     ToggleState_4 = LOW;
     prev_state_switch_4 = 1;
@@ -150,8 +148,7 @@ void loop()
 #endif
   delay(150);
 #ifdef SWITCH_INPUT_1
-  if (prev_state_switch_1 == 1 && digitalRead(SWITCH_INPUT_1) == HIGH)
-  {
+  if (prev_state_switch_1 == 1 && digitalRead(SWITCH_INPUT_1) == HIGH) {
     digitalWrite(RELAY_OUTPUT_1, HIGH);
     ToggleState_1 = HIGH;
     prev_state_switch_1 = 0;
@@ -159,8 +156,7 @@ void loop()
   }
 #endif
 #ifdef SWITCH_INPUT_2
-  if (prev_state_switch_2 == 1 && digitalRead(SWITCH_INPUT_2) == HIGH)
-  {
+  if (prev_state_switch_2 == 1 && digitalRead(SWITCH_INPUT_2) == HIGH) {
     digitalWrite(RELAY_OUTPUT_2, HIGH);
     ToggleState_2 = HIGH;
     prev_state_switch_2 = 0;
@@ -168,8 +164,7 @@ void loop()
   }
 #endif
 #ifdef SWITCH_INPUT_3
-  if (prev_state_switch_3 == 1 && digitalRead(SWITCH_INPUT_3) == HIGH)
-  {
+  if (prev_state_switch_3 == 1 && digitalRead(SWITCH_INPUT_3) == HIGH) {
     digitalWrite(RELAY_OUTPUT_3, HIGH);
     ToggleState_3 = HIGH;
     prev_state_switch_3 = 0;
@@ -177,8 +172,7 @@ void loop()
   }
 #endif
 #ifdef SWITCH_INPUT_4
-  if (prev_state_switch_4 == 1 && digitalRead(SWITCH_INPUT_4) == HIGH)
-  {
+  if (prev_state_switch_4 == 1 && digitalRead(SWITCH_INPUT_4) == HIGH) {
     digitalWrite(RELAY_OUTPUT_4, HIGH);
     ToggleState_4 = HIGH;
     prev_state_switch_4 = 0;
@@ -189,48 +183,42 @@ void loop()
 }
 
 /*
- * Control relay using Blynk Virtual Pins
- * 
- * This special function is called BLYNK_WRITE. Think of it
- * as meaning that the Blynk.Cloud is telling your hardware 
- * “there a new value written to your virtual pin”.
- */
+   Control relay using Blynk Virtual Pins
 
-BLYNK_WRITE(VPIN_BUTTON_1)
-{
+   This special function is called BLYNK_WRITE. Think of it
+   as meaning that the Blynk.Cloud is telling your hardware
+   “there a new value written to your virtual pin”.
+*/
+
+BLYNK_WRITE(VPIN_BUTTON_1) {
   digitalWrite(RELAY_OUTPUT_1, !param.asInt());
   ToggleState_1 = !param.asInt();
 }
 
-BLYNK_WRITE(VPIN_BUTTON_2)
-{
+BLYNK_WRITE(VPIN_BUTTON_2) {
   digitalWrite(RELAY_OUTPUT_2, !param.asInt());
   ToggleState_2 = !param.asInt();
 }
 
-BLYNK_WRITE(VPIN_BUTTON_3)
-{
+BLYNK_WRITE(VPIN_BUTTON_3) {
   digitalWrite(RELAY_OUTPUT_3, !param.asInt());
   ToggleState_3 = !param.asInt();
 }
 
-BLYNK_WRITE(VPIN_BUTTON_4)
-{
+BLYNK_WRITE(VPIN_BUTTON_4) {
   digitalWrite(RELAY_OUTPUT_4, !param.asInt());
   ToggleState_4 = !param.asInt();
 }
 
 /*
- * Request the latest state from Cloud
- * 
- * Requests all latest stored values for all widgets. All 
- * analog/digital/virtual pin values and states will be
- * set to the latest stored value. Every virtual pin will
- * generate BLYNK_WRITE() event.
- */
-BLYNK_CONNECTED()
-{
-  //  Serial.println("Blynk Connected Excuted: Sync... v1,v2,v3,v4");
+   Request the latest state from Cloud
+
+   Requests all latest stored values for all widgets. All
+   analog/digital/virtual pin values and states will be
+   set to the latest stored value. Every virtual pin will
+   generate BLYNK_WRITE() event.
+*/
+BLYNK_CONNECTED() {
   Blynk.syncVirtual(VPIN_BUTTON_1, VPIN_BUTTON_2, VPIN_BUTTON_3, VPIN_BUTTON_4);
   //    Blynk.syncAll();
 }
