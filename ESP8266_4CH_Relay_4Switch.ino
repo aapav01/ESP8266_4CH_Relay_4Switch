@@ -18,7 +18,7 @@
 #define BLYNK_DEVICE_NAME "IoT Extension"
 #define BLYNK_AUTH_TOKEN "I_X9wjUj-nOaqg7_MJYXgn6MOn4KDCU8"
 
-#define BLYNK_FIRMWARE_VERSION "0.1.3" // Application Version
+#define BLYNK_FIRMWARE_VERSION "0.1.4" // Application Version
 
 #define BLYNK_PRINT Serial
 //#define BLYNK_DEBUG // Debug
@@ -41,7 +41,7 @@
 #define SWITCH_INPUT_1 13 // D7
 #define SWITCH_INPUT_2 D3 // D3
 #define SWITCH_INPUT_3 3  // RX
-#define SWITCH_INPUT_4 10 // D0
+//#define SWITCH_INPUT_4 16 // D8 -- Semi-functional at the w
 
 /*
    Virtual PINs
@@ -83,16 +83,10 @@ void setup()
   delay(500);
 
   // Set ALl Switchs as Input
-#ifdef SWITCH_INPUT_1
   pinMode(SWITCH_INPUT_1, INPUT_PULLUP);
-#endif
-#ifdef SWITCH_INPUT_2
   pinMode(SWITCH_INPUT_2, INPUT_PULLUP);
-#endif
-#ifdef SWITCH_INPUT_3
   pinMode(SWITCH_INPUT_3, INPUT_PULLUP);
-#endif
-#ifdef SWITCH_INPUT_4
+#if defined(SWITCH_INPUT_4)
   pinMode(SWITCH_INPUT_4, INPUT_PULLUP);
 #endif
 
@@ -114,31 +108,25 @@ void setup()
 void loop()
 {
   BlynkEdgent.run();
-#ifdef SWITCH_INPUT_1
   if (digitalRead(SWITCH_INPUT_1) == LOW) {
     digitalWrite(RELAY_OUTPUT_1, LOW);
     ToggleState_1 = LOW;
     prev_state_switch_1 = 1;
     Blynk.virtualWrite(VPIN_BUTTON_1, 1);
   }
-#endif
-#ifdef SWITCH_INPUT_2
   if (digitalRead(SWITCH_INPUT_2) == LOW) {
     digitalWrite(RELAY_OUTPUT_2, LOW);
     ToggleState_2 = LOW;
     prev_state_switch_2 = 1;
     Blynk.virtualWrite(VPIN_BUTTON_2, 1);
   }
-#endif
-#ifdef SWITCH_INPUT_3
   if (digitalRead(SWITCH_INPUT_3) == LOW) {
     digitalWrite(RELAY_OUTPUT_3, LOW);
     ToggleState_3 = LOW;
     prev_state_switch_3 = 1;
     Blynk.virtualWrite(VPIN_BUTTON_3, 1);
   }
-#endif
-#ifdef SWITCH_INPUT_4
+#if defined(SWITCH_INPUT_4)
   if (digitalRead(SWITCH_INPUT_4) == LOW) {
     digitalWrite(RELAY_OUTPUT_4, LOW);
     ToggleState_4 = LOW;
@@ -147,31 +135,25 @@ void loop()
   }
 #endif
   delay(150);
-#ifdef SWITCH_INPUT_1
   if (prev_state_switch_1 == 1 && digitalRead(SWITCH_INPUT_1) == HIGH) {
     digitalWrite(RELAY_OUTPUT_1, HIGH);
     ToggleState_1 = HIGH;
     prev_state_switch_1 = 0;
     Blynk.virtualWrite(VPIN_BUTTON_1, 0);
   }
-#endif
-#ifdef SWITCH_INPUT_2
   if (prev_state_switch_2 == 1 && digitalRead(SWITCH_INPUT_2) == HIGH) {
     digitalWrite(RELAY_OUTPUT_2, HIGH);
     ToggleState_2 = HIGH;
     prev_state_switch_2 = 0;
     Blynk.virtualWrite(VPIN_BUTTON_2, 0);
   }
-#endif
-#ifdef SWITCH_INPUT_3
   if (prev_state_switch_3 == 1 && digitalRead(SWITCH_INPUT_3) == HIGH) {
     digitalWrite(RELAY_OUTPUT_3, HIGH);
     ToggleState_3 = HIGH;
     prev_state_switch_3 = 0;
     Blynk.virtualWrite(VPIN_BUTTON_3, 0);
   }
-#endif
-#ifdef SWITCH_INPUT_4
+#if defined(SWITCH_INPUT_4)
   if (prev_state_switch_4 == 1 && digitalRead(SWITCH_INPUT_4) == HIGH) {
     digitalWrite(RELAY_OUTPUT_4, HIGH);
     ToggleState_4 = HIGH;
@@ -193,21 +175,37 @@ void loop()
 BLYNK_WRITE(VPIN_BUTTON_1) {
   digitalWrite(RELAY_OUTPUT_1, !param.asInt());
   ToggleState_1 = !param.asInt();
+#ifdef APP_DEBUG
+  Serial.print("Virtual Pin 1 Changed to: ");
+  Serial.println(param.asInt() ? "ON" : "OFF");
+#endif
 }
 
 BLYNK_WRITE(VPIN_BUTTON_2) {
   digitalWrite(RELAY_OUTPUT_2, !param.asInt());
   ToggleState_2 = !param.asInt();
+#ifdef APP_DEBUG
+  Serial.print("Virtual Pin 2 Changed to: ");
+  Serial.println(param.asInt() ? "ON" : "OFF");
+#endif
 }
 
 BLYNK_WRITE(VPIN_BUTTON_3) {
   digitalWrite(RELAY_OUTPUT_3, !param.asInt());
   ToggleState_3 = !param.asInt();
+#ifdef APP_DEBUG
+  Serial.print("Virtual Pin 3 Changed to: ");
+  Serial.println(param.asInt() ? "ON" : "OFF");
+#endif
 }
 
 BLYNK_WRITE(VPIN_BUTTON_4) {
   digitalWrite(RELAY_OUTPUT_4, !param.asInt());
   ToggleState_4 = !param.asInt();
+#ifdef APP_DEBUG
+  Serial.print("Virtual Pin 4 Changed to: ");
+  Serial.println(param.asInt() ? "ON" : "OFF");
+#endif
 }
 
 /*
@@ -219,6 +217,6 @@ BLYNK_WRITE(VPIN_BUTTON_4) {
    generate BLYNK_WRITE() event.
 */
 BLYNK_CONNECTED() {
-  Blynk.syncVirtual(VPIN_BUTTON_1, VPIN_BUTTON_2, VPIN_BUTTON_3, VPIN_BUTTON_4);
-  //    Blynk.syncAll();
+//  Blynk.syncVirtual(VPIN_BUTTON_1, VPIN_BUTTON_2, VPIN_BUTTON_3, VPIN_BUTTON_4);
+  Blynk.syncAll();
 }
