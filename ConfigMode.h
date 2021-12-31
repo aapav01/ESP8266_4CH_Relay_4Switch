@@ -51,7 +51,9 @@ const byte DNS_PORT = 53;
     <table>
     <tr><td><label for="ssid">WiFi SSID:</label></td>  <td><input type="text" name="ssid" length=64 required="required"></td></tr>
     <tr><td><label for="pass">Password:</label></td>   <td><input type="text" name="pass" length=64></td></tr>
+#ifndef BLYNK_AUTH_TOKEN
     <tr><td><label for="blynk">Auth token:</label></td><td><input type="text" name="blynk" placeholder="a0b1c2d..." pattern="[-_a-zA-Z0-9]{32}" maxlength="32" required="required"></td></tr>
+#endif
     <tr><td><label for="host">Host:</label></td>       <td><input type="text" name="host" value="blynk.cloud" length=64></td></tr>
     <tr><td><label for="port_ssl">Port:</label></td>   <td><input type="number" name="port_ssl" value="443" min="1" max="65535"></td></tr>
     </table><br/>
@@ -137,7 +139,11 @@ void enterConfigMode()
     if (ssidManual != "") {
       ssid = ssidManual;
     }
+#ifdef BLYNK_AUTH_TOKEN
+    String token = BLYNK_AUTH_TOKEN;
+#else
     String token = server.arg("blynk");
+#endif
     String host  = server.arg("host");
     String port  = server.arg("port_ssl");
 
