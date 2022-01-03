@@ -19,9 +19,44 @@
 
 #include "thingProperties.h"
 
+/*
+   GPIO PINs
+
+   Which we will used to to controll the Relay and physical Switch
+*/
+#define RELAY_OUTPUT_1 4  // D2
+#define RELAY_OUTPUT_2 5  // D1
+#define RELAY_OUTPUT_3 12 // D6
+#define RELAY_OUTPUT_4 14 // D5
+
+#define SWITCH_INPUT_1 13 // D7
+#define SWITCH_INPUT_2 D3 // D3
+#define SWITCH_INPUT_3 3  // RX
+#define SWITCH_INPUT_4 16 // D8 -- Semi-functional at the momemt
+
 void setup() {
+  // Set ALl Switchs as Input
+  pinMode(SWITCH_INPUT_1, INPUT_PULLUP);
+  pinMode(SWITCH_INPUT_2, INPUT_PULLUP);
+  pinMode(SWITCH_INPUT_3, INPUT_PULLUP);
+#if defined(SWITCH_INPUT_4)
+  pinMode(SWITCH_INPUT_4, INPUT_PULLUP);
+#endif
+
+  // Set ALl Relay as Output
+  pinMode(RELAY_OUTPUT_1, OUTPUT);
+  pinMode(RELAY_OUTPUT_2, OUTPUT);
+  pinMode(RELAY_OUTPUT_3, OUTPUT);
+  pinMode(RELAY_OUTPUT_4, OUTPUT);
+
+  //Initialize all pin to LOW (0/OFF)
+  digitalWrite(RELAY_OUTPUT_1, HIGH);
+  digitalWrite(RELAY_OUTPUT_2, HIGH);
+  digitalWrite(RELAY_OUTPUT_3, HIGH);
+  digitalWrite(RELAY_OUTPUT_4, HIGH);
+
   // Initialize serial and wait for port to open:
-  Serial.begin(9600);
+  Serial.begin(115200);
   // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
   delay(1500); 
 
@@ -45,7 +80,7 @@ void setup() {
 void loop() {
   ArduinoCloud.update();
   // Your code here 
-  
+  delay(300);
   
 }
 
@@ -58,6 +93,7 @@ void loop() {
 */
 void onSwitch1Change()  {
   // Add your code here to act upon Switch1 change
+  digitalWrite(RELAY_OUTPUT_1, !switch_1);
 }
 
 /*
@@ -66,6 +102,7 @@ void onSwitch1Change()  {
 */
 void onSwitch2Change()  {
   // Add your code here to act upon Switch2 change
+  digitalWrite(RELAY_OUTPUT_2, !switch_2);
 }
 
 /*
@@ -74,6 +111,7 @@ void onSwitch2Change()  {
 */
 void onSwitch3Change()  {
   // Add your code here to act upon Switch3 change
+  digitalWrite(RELAY_OUTPUT_3, !switch_3);
 }
 
 /*
@@ -82,4 +120,5 @@ void onSwitch3Change()  {
 */
 void onSwitch4Change()  {
   // Add your code here to act upon Switch4 change
+  digitalWrite(RELAY_OUTPUT_4, !switch_4);
 }
