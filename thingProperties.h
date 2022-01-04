@@ -2,7 +2,7 @@
 
 #include <ArduinoIoTCloud.h>
 #include <Arduino_ConnectionHandler.h>
-
+#include "arduino_secrets.h"
 
 const char THING_ID[]           = "27c3ccb9-3233-440b-9f36-3b70d989db76";
 const char DEVICE_LOGIN_NAME[]  = "0fd355a3-c7b8-4d63-8574-7fce7fa45a51";
