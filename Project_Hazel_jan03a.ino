@@ -43,6 +43,11 @@ bool prev_state_switch_4 = 0;
 
 
 void setup() {
+  // Initialize serial and wait for port to open:
+  Serial.begin(115200);
+  // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
+  delay(1500);
+
   // Set ALl Switchs as Input
   pinMode(SWITCH_INPUT_1, INPUT_PULLUP);
   pinMode(SWITCH_INPUT_2, INPUT_PULLUP);
@@ -63,11 +68,6 @@ void setup() {
   digitalWrite(RELAY_OUTPUT_3, HIGH);
   digitalWrite(RELAY_OUTPUT_4, HIGH);
 
-  // Initialize serial and wait for port to open:
-  Serial.begin(115200);
-  // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
-  delay(1500);
-
   // Defined in thingProperties.h
   initProperties();
 
@@ -87,59 +87,69 @@ void setup() {
 
 void loop() {
   ArduinoCloud.update();
-  int switchState_1 = digitalRead(SWITCH_INPUT_1);
-  int switchState_2 = digitalRead(SWITCH_INPUT_2);
-  int switchState_3 = digitalRead(SWITCH_INPUT_3);
+  // delay(300);
+  bool switchState_1 = digitalRead(SWITCH_INPUT_1);
+  bool switchState_2 = digitalRead(SWITCH_INPUT_2);
+  bool switchState_3 = digitalRead(SWITCH_INPUT_3);
 #if defined(SWITCH_INPUT_4)
-  int switchState_4 = digitalRead(SWITCH_INPUT_4);
+  bool switchState_4 = digitalRead(SWITCH_INPUT_4);
 #endif
 
   // Condition to Check if Switch is ON
-  if (switchState_1 == LOW) {
-    switch_1 = LOW;
+  if (switchState_1 == HIGH) {
+    switch_1 = HIGH;
+    digitalWrite(RELAY_OUTPUT_1, switch_1);
     prev_state_switch_1 = true;
     delay(100);
   }
-  if (switchState_2 == LOW) {
-    switch_2 = LOW;
+  if (switchState_2 == HIGH) {
+    switch_2 = HIGH;
+    digitalWrite(RELAY_OUTPUT_2, switch_2);
     prev_state_switch_2 = true;
     delay(100);
   }
-  if (switchState_3 == LOW) {
-    switch_3 = LOW;
+  if (switchState_3 == HIGH) {
+    switch_3 = HIGH;
+    digitalWrite(RELAY_OUTPUT_3, switch_3);
     prev_state_switch_3 = true;
     delay(100);
   }
 #if defined(SWITCH_INPUT_4)
-  if (switchState_4 == LOW) {
-    switch_4 = LOW;
+  if (switchState_4 == HIGH) {
+    switch_4 = HIGH;
+    digitalWrite(RELAY_OUTPUT_4, switch_4);
     prev_state_switch_4 = true;
     delay(100);
   }
 #endif
   // Condition to Check if Switch is OFF
-  if (prev_state_switch_1 == true && switchState_1 == HIGH) {
-    switch_1 = HIGH;
+  if (prev_state_switch_1 == true && switchState_1 == LOW) {
+    switch_1 = LOW;
+    digitalWrite(RELAY_OUTPUT_1, switch_1);
     prev_state_switch_1 = false;
     delay(100);
   }
-  if (prev_state_switch_2 == true && switchState_2 == HIGH) {
-    switch_2 = HIGH;
+  if (prev_state_switch_2 == true && switchState_2 == LOW) {
+    switch_2 = LOW;
+    digitalWrite(RELAY_OUTPUT_2, switch_2);
     prev_state_switch_2 = false;
     delay(100);
   }
-  if (prev_state_switch_3 == true && switchState_3 == HIGH) {
-    switch_3 = HIGH;
+  if (prev_state_switch_3 == true && switchState_3 == LOW) {
+    switch_3 = LOW;
+    digitalWrite(RELAY_OUTPUT_3, switch_3);
     prev_state_switch_3 = false;
     delay(100);
   }
 #if defined(SWITCH_INPUT_4)
-  if (prev_state_switch_4 == true && switchState_4 == HIGH) {
-    switch_4 = HIGH;
+  if (prev_state_switch_4 == true && switchState_4 == LOW) {
+    switch_4 = LOW;
+    digitalWrite(RELAY_OUTPUT_4, switch_4);
     prev_state_switch_4 = false;
     delay(100);
   }
 #endif
+
 }
 
 
@@ -150,7 +160,11 @@ void loop() {
   executed every time a new value is received from IoT Cloud.
 */
 void onSwitch1Change()  {
-  digitalWrite(RELAY_OUTPUT_1, !switch_1);
+  bool state = switch_1;
+  if (state)
+    digitalWrite(RELAY_OUTPUT_1, LOW);
+  else
+    digitalWrite(RELAY_OUTPUT_1, HIGH);
 }
 
 /*
@@ -158,7 +172,11 @@ void onSwitch1Change()  {
   executed every time a new value is received from IoT Cloud.
 */
 void onSwitch2Change()  {
-  digitalWrite(RELAY_OUTPUT_2, !switch_2);
+  bool state = switch_2;
+  if (state)
+    digitalWrite(RELAY_OUTPUT_2, LOW);
+  else
+    digitalWrite(RELAY_OUTPUT_2, HIGH);
 }
 
 /*
@@ -166,7 +184,11 @@ void onSwitch2Change()  {
   executed every time a new value is received from IoT Cloud.
 */
 void onSwitch3Change()  {
-  digitalWrite(RELAY_OUTPUT_3, !switch_3);
+  bool state = switch_3;
+  if (state)
+    digitalWrite(RELAY_OUTPUT_3, LOW);
+  else
+    digitalWrite(RELAY_OUTPUT_3, HIGH);
 }
 
 #if defined(SWITCH_INPUT_4)
@@ -175,6 +197,10 @@ void onSwitch3Change()  {
   executed every time a new value is received from IoT Cloud.
 */
 void onSwitch4Change()  {
-  digitalWrite(RELAY_OUTPUT_4, !switch_4);
+  bool state = switch_4;
+  if (state)
+    digitalWrite(RELAY_OUTPUT_4, LOW);
+  else
+    digitalWrite(RELAY_OUTPUT_4, HIGH);
 }
 #endif
