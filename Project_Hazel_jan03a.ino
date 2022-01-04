@@ -31,22 +31,39 @@
 #define SWITCH_INPUT_1 13 // D7
 #define SWITCH_INPUT_2 D3 // D3
 #define SWITCH_INPUT_3 3  // RX
-#define SWITCH_INPUT_4 16 // D8 -- Semi-functional at the momemt
+#define SWITCH_INPUT_4 2 // D4
 
 /*
    Previous Relay State
 */
-bool prev_state_switch_1 = 0;
-bool prev_state_switch_2 = 0;
-bool prev_state_switch_3 = 0;
-bool prev_state_switch_4 = 0;
+bool prev_state_switch_1 = false;
+bool prev_state_switch_2 = false;
+bool prev_state_switch_3 = false;
+bool prev_state_switch_4 = false;
 
 
 void setup() {
   // Initialize serial and wait for port to open:
-  Serial.begin(115200);
+  // Serial.begin(115200);
+  Serial.begin(9600);
   // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
   delay(1500);
+
+  // Defined in thingProperties.h
+  initProperties();
+
+  // Connect to Arduino IoT Cloud
+  ArduinoCloud.begin(ArduinoIoTPreferredConnection);
+
+  /*
+     The following function allows you to obtain more information
+     related to the state of network and IoT Cloud connection and errors
+     the higher number the more granular information you’ll get.
+     The default is 0 (only errors).
+     Maximum is 4
+  */
+  setDebugMessageLevel(4);
+  ArduinoCloud.printDebugInfo();
 
   // Set ALl Switchs as Input
   pinMode(SWITCH_INPUT_1, INPUT_PULLUP);
@@ -62,27 +79,11 @@ void setup() {
   pinMode(RELAY_OUTPUT_3, OUTPUT);
   pinMode(RELAY_OUTPUT_4, OUTPUT);
 
-  //Initialize all pin to LOW (0/OFF)
+  //Initialize all pin to HIGH (0/OFF)
   digitalWrite(RELAY_OUTPUT_1, HIGH);
   digitalWrite(RELAY_OUTPUT_2, HIGH);
   digitalWrite(RELAY_OUTPUT_3, HIGH);
   digitalWrite(RELAY_OUTPUT_4, HIGH);
-
-  // Defined in thingProperties.h
-  initProperties();
-
-  // Connect to Arduino IoT Cloud
-  ArduinoCloud.begin(ArduinoIoTPreferredConnection);
-
-  /*
-     The following function allows you to obtain more information
-     related to the state of network and IoT Cloud connection and errors
-     the higher number the more granular information you’ll get.
-     The default is 0 (only errors).
-     Maximum is 4
-  */
-  setDebugMessageLevel(2);
-  ArduinoCloud.printDebugInfo();
 }
 
 void loop() {
@@ -97,47 +98,47 @@ void loop() {
 
   // Condition to Check if Switch is ON
   if (switchState_1 == HIGH) {
-    switch_1 = HIGH;
-    digitalWrite(RELAY_OUTPUT_1, switch_1);
+    switch_1 = LOW;
+    digitalWrite(RELAY_OUTPUT_1, !switch_1);
     prev_state_switch_1 = true;
   }
   if (switchState_2 == HIGH) {
-    switch_2 = HIGH;
-    digitalWrite(RELAY_OUTPUT_2, switch_2);
+    switch_2 = LOW;
+    digitalWrite(RELAY_OUTPUT_2, !switch_2);
     prev_state_switch_2 = true;
   }
   if (switchState_3 == HIGH) {
-    switch_3 = HIGH;
-    digitalWrite(RELAY_OUTPUT_3, switch_3);
+    switch_3 = LOW;
+    digitalWrite(RELAY_OUTPUT_3, !switch_3);
     prev_state_switch_3 = true;
   }
 #if defined(SWITCH_INPUT_4)
   if (switchState_4 == HIGH) {
-    switch_4 = HIGH;
-    digitalWrite(RELAY_OUTPUT_4, switch_4);
+    switch_4 = LOW;
+    digitalWrite(RELAY_OUTPUT_4, !switch_4);
     prev_state_switch_4 = true;
   }
 #endif
   // Condition to Check if Switch is OFF
   if (prev_state_switch_1 == true && switchState_1 == LOW) {
-    switch_1 = LOW;
-    digitalWrite(RELAY_OUTPUT_1, switch_1);
+    switch_1 = HIGH;
+    digitalWrite(RELAY_OUTPUT_1, !switch_1);
     prev_state_switch_1 = false;
   }
   if (prev_state_switch_2 == true && switchState_2 == LOW) {
-    switch_2 = LOW;
-    digitalWrite(RELAY_OUTPUT_2, switch_2);
+    switch_2 = HIGH;
+    digitalWrite(RELAY_OUTPUT_2, !switch_2);
     prev_state_switch_2 = false;
   }
   if (prev_state_switch_3 == true && switchState_3 == LOW) {
-    switch_3 = LOW;
-    digitalWrite(RELAY_OUTPUT_3, switch_3);
+    switch_3 = HIGH;
+    digitalWrite(RELAY_OUTPUT_3, !switch_3);
     prev_state_switch_3 = false;
   }
 #if defined(SWITCH_INPUT_4)
   if (prev_state_switch_4 == true && switchState_4 == LOW) {
-    switch_4 = LOW;
-    digitalWrite(RELAY_OUTPUT_4, switch_4);
+    switch_4 = HIGH;
+    digitalWrite(RELAY_OUTPUT_4, !switch_4);
     prev_state_switch_4 = false;
   }
 #endif
