@@ -100,26 +100,22 @@ void loop() {
     switch_1 = HIGH;
     digitalWrite(RELAY_OUTPUT_1, switch_1);
     prev_state_switch_1 = true;
-    delay(100);
   }
   if (switchState_2 == HIGH) {
     switch_2 = HIGH;
     digitalWrite(RELAY_OUTPUT_2, switch_2);
     prev_state_switch_2 = true;
-    delay(100);
   }
   if (switchState_3 == HIGH) {
     switch_3 = HIGH;
     digitalWrite(RELAY_OUTPUT_3, switch_3);
     prev_state_switch_3 = true;
-    delay(100);
   }
 #if defined(SWITCH_INPUT_4)
   if (switchState_4 == HIGH) {
     switch_4 = HIGH;
     digitalWrite(RELAY_OUTPUT_4, switch_4);
     prev_state_switch_4 = true;
-    delay(100);
   }
 #endif
   // Condition to Check if Switch is OFF
@@ -127,29 +123,25 @@ void loop() {
     switch_1 = LOW;
     digitalWrite(RELAY_OUTPUT_1, switch_1);
     prev_state_switch_1 = false;
-    delay(100);
   }
   if (prev_state_switch_2 == true && switchState_2 == LOW) {
     switch_2 = LOW;
     digitalWrite(RELAY_OUTPUT_2, switch_2);
     prev_state_switch_2 = false;
-    delay(100);
   }
   if (prev_state_switch_3 == true && switchState_3 == LOW) {
     switch_3 = LOW;
     digitalWrite(RELAY_OUTPUT_3, switch_3);
     prev_state_switch_3 = false;
-    delay(100);
   }
 #if defined(SWITCH_INPUT_4)
   if (prev_state_switch_4 == true && switchState_4 == LOW) {
     switch_4 = LOW;
     digitalWrite(RELAY_OUTPUT_4, switch_4);
     prev_state_switch_4 = false;
-    delay(100);
   }
 #endif
-
+  delay(150);
 }
 
 
