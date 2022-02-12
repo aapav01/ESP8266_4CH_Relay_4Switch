@@ -44,8 +44,7 @@ bool prev_state_switch_4 = false;
 
 void setup() {
   // Initialize serial and wait for port to open:
-  // Serial.begin(115200);
-  Serial.begin(9600);
+  Serial.begin(115200);
   // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
   delay(1500);
 
@@ -69,9 +68,7 @@ void setup() {
   pinMode(SWITCH_INPUT_1, INPUT_PULLUP);
   pinMode(SWITCH_INPUT_2, INPUT_PULLUP);
   pinMode(SWITCH_INPUT_3, INPUT_PULLUP);
-#if defined(SWITCH_INPUT_4)
   pinMode(SWITCH_INPUT_4, INPUT_PULLUP);
-#endif
 
   // Set ALl Relay as Output
   pinMode(RELAY_OUTPUT_1, OUTPUT);
@@ -79,7 +76,7 @@ void setup() {
   pinMode(RELAY_OUTPUT_3, OUTPUT);
   pinMode(RELAY_OUTPUT_4, OUTPUT);
 
-  //Initialize all pin to HIGH (0/OFF)
+  //Initialize all pin to HIGH (OFF)
   digitalWrite(RELAY_OUTPUT_1, HIGH);
   digitalWrite(RELAY_OUTPUT_2, HIGH);
   digitalWrite(RELAY_OUTPUT_3, HIGH);
@@ -88,61 +85,60 @@ void setup() {
 
 void loop() {
   ArduinoCloud.update();
-  // delay(300);
   bool switchState_1 = digitalRead(SWITCH_INPUT_1);
   bool switchState_2 = digitalRead(SWITCH_INPUT_2);
   bool switchState_3 = digitalRead(SWITCH_INPUT_3);
-#if defined(SWITCH_INPUT_4)
   bool switchState_4 = digitalRead(SWITCH_INPUT_4);
-#endif
-
-  // Condition to Check if Switch is ON
-  if (switchState_1 == HIGH) {
-    switch_1 = LOW;
-    digitalWrite(RELAY_OUTPUT_1, !switch_1);
-    prev_state_switch_1 = true;
-  }
-  if (switchState_2 == HIGH) {
-    switch_2 = LOW;
-    digitalWrite(RELAY_OUTPUT_2, !switch_2);
-    prev_state_switch_2 = true;
-  }
-  if (switchState_3 == HIGH) {
-    switch_3 = LOW;
-    digitalWrite(RELAY_OUTPUT_3, !switch_3);
-    prev_state_switch_3 = true;
-  }
-#if defined(SWITCH_INPUT_4)
-  if (switchState_4 == HIGH) {
-    switch_4 = LOW;
-    digitalWrite(RELAY_OUTPUT_4, !switch_4);
-    prev_state_switch_4 = true;
-  }
-#endif
-  // Condition to Check if Switch is OFF
-  if (prev_state_switch_1 == true && switchState_1 == LOW) {
-    switch_1 = HIGH;
-    digitalWrite(RELAY_OUTPUT_1, !switch_1);
-    prev_state_switch_1 = false;
-  }
-  if (prev_state_switch_2 == true && switchState_2 == LOW) {
-    switch_2 = HIGH;
-    digitalWrite(RELAY_OUTPUT_2, !switch_2);
-    prev_state_switch_2 = false;
-  }
-  if (prev_state_switch_3 == true && switchState_3 == LOW) {
-    switch_3 = HIGH;
-    digitalWrite(RELAY_OUTPUT_3, !switch_3);
-    prev_state_switch_3 = false;
-  }
-#if defined(SWITCH_INPUT_4)
-  if (prev_state_switch_4 == true && switchState_4 == LOW) {
-    switch_4 = HIGH;
-    digitalWrite(RELAY_OUTPUT_4, !switch_4);
+  delay(150);
+  if(switchState_4 == 1 && prev_state_switch_4 == true) {
+    Serial.println("Switch 4 : 1 OFF");
+    digitalWrite(RELAY_OUTPUT_4, HIGH);
+    switch_4 = false;
     prev_state_switch_4 = false;
   }
-#endif
-  delay(150);
+  if(switchState_3 == 1 && prev_state_switch_3 == true) {
+    Serial.println("Switch 3 : 1 OFF");
+    digitalWrite(RELAY_OUTPUT_3, HIGH);
+    switch_3 = false;
+    prev_state_switch_3 = false;
+  }
+  if(switchState_2 == 1 && prev_state_switch_2 == true) {
+    Serial.println("Switch 2 : 1 OFF");
+    digitalWrite(RELAY_OUTPUT_2, HIGH);
+    switch_2 = false;
+    prev_state_switch_2 = false;
+  }
+  if(switchState_1 == 1 && prev_state_switch_1 == true) {
+    Serial.println("Switch 1 : 1 OFF");
+    digitalWrite(RELAY_OUTPUT_1, HIGH);
+    switch_1 = false;
+    prev_state_switch_1 = false;
+  }
+
+  if(switchState_4 == 0) {
+    Serial.println("Switch 4 : 0 ON");
+    digitalWrite(RELAY_OUTPUT_4, LOW);
+    prev_state_switch_4 = true;
+    switch_4 = true;
+  }
+  if(switchState_3 == 0) {
+    Serial.println("Switch 3 : 0 ON");
+    digitalWrite(RELAY_OUTPUT_3, LOW);
+    prev_state_switch_3 = true;
+    switch_3 = true;
+  }
+  if(switchState_2 == 0) {
+    Serial.println("Switch 2 : 0 ON");
+    digitalWrite(RELAY_OUTPUT_2, LOW);
+    prev_state_switch_2 = true;
+    switch_2 = true;
+  }
+  if(switchState_1 == 0) {
+    Serial.println("Switch 1 : 0 ON");
+    digitalWrite(RELAY_OUTPUT_1, LOW);
+    prev_state_switch_1 = true;
+    switch_1 = true;
+  }
 }
 
 
@@ -184,7 +180,7 @@ void onSwitch3Change()  {
     digitalWrite(RELAY_OUTPUT_3, HIGH);
 }
 
-#if defined(SWITCH_INPUT_4)
+
 /*
   Since Switch4 is READ_WRITE variable, onSwitch4Change() is
   executed every time a new value is received from IoT Cloud.
@@ -196,4 +192,3 @@ void onSwitch4Change()  {
   else
     digitalWrite(RELAY_OUTPUT_4, HIGH);
 }
-#endif
