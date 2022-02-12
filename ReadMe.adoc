@@ -1,37 +1,19 @@
-:Author: aapav
-:Email:
+:Author: Apavayan Sinha
+:Email: info@apavayan.com
 :Date: 03/01/2022
-:Revision: version#
+:Revision: version# 1
 :License: Public Domain
 
-= Project: {Project}
+= Project: Hazel
 
-Describe your project
-
-== Step 1: Installation
-Please describe the steps to install this project.
-
-For example:
-
-1. Open this file
-2. Edit as you like
-3. Release to the World!
-
-== Step 2: Assemble the circuit
-
-Assemble the circuit following the diagram layout.png attached to the sketch
-
-== Step 3: Load the code
-
-Upload the code contained in this sketch on to your board
+A smiple 4 relay with 4 switch IoT Extension using Arduino Cloud.
 
 === Folder structure
 
 ....
- sketch123                => Arduino sketch folder
-  ├── sketch123.ino       => main Arduino file
-  ├── schematics.png      => (optional) an image of the required schematics
-  ├── layout.png          => (optional) an image of the layout
+ Project_Hazel_jan03a                => Arduino sketch folder
+  ├── Project_Hazel_jan03a.ino       => main Arduino file
+  ├── arduino_secrets.h.example      => example file for arduino_secrets.h to store wifi name and password.
   └── ReadMe.adoc         => this file
 ....
 
@@ -40,15 +22,20 @@ This project is released under a {License} License.
 
 === Contributing
 To contribute to this project please contact: 
+{Email}
+
+=== TODO:
+Add Offline scheduling to accept values form Alexa.
 
 === BOM
 Add the bill of the materials you need for this project.
 
 |===
-| ID | Part name      | Part number | Quantity
-| R1 | 10k Resistor   | 1234-abcd   | 10       
-| L1 | Red LED        | 2345-asdf   | 5        
-| A1 | Arduino Zero   | ABX00066    | 1        
+| Part name      | Part number | Quantity
+| On/Off Switch  |             | 4      
+| 4 Channel Relay Module |     | 1     
+| ESP8266        | NodeMCU     | 1
+| 220V AC to 5V DC 2Amp Circuit Board | SMPS | 1  
 |===
 
 
